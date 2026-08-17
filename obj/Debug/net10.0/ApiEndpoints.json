@@ -1,0 +1,52 @@
+[
+  {
+    "ContainingType": "SOS.Controllers.EmergencyController",
+    "Method": "ActivateAlert",
+    "RelativePath": "api/Emergency/activate",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "alerta",
+        "Type": "SOS.Models.AlertaEvacuacion",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SOS.Controllers.EmergencyController",
+    "Method": "ConfirmSafety",
+    "RelativePath": "api/Emergency/confirm-safety",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "confirmacion",
+        "Type": "SOS.Models.ConfirmacionSeguridad",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SOS.Controllers.EmergencyController",
+    "Method": "GetLatestActiveAlert",
+    "RelativePath": "api/Emergency/latest-alert",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "SOS.Models.AlertaEvacuacion",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  }
+]
