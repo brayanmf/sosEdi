@@ -9,12 +9,12 @@ namespace SOS.Models
         public int Id { get; set; }
 
    
-        public string? IdUsuario { get; set; }  
+        public int? IdUsuario { get; set; }  
  
         public DateTime FechaHoraActivacion { get; set; }
  
+        public int? IdTipoAlerta { get; set; }
         public string? TipoAlerta { get; set; }
-
         public string? MensajeAlerta { get; set; }
 
        
@@ -27,8 +27,8 @@ namespace SOS.Models
         public string? DescripcionUbicacionActivacion { get; set; }
  
      
+        public int? IdEstadoAlerta { get; set; }
         public string? EstadoAlerta { get; set; }
- 
         public int? UsuarioRegistro { get; set; }
         public DateTime? FechaRegistro { get; set; }
         public int? UsuarioModifica { get; set; }

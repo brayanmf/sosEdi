@@ -46,12 +46,12 @@ namespace SOS.Controllers
         [Produces("application/json")]
         public async Task<IActionResult> ActivateAlert([FromBody] AlertaEvacuacion alerta)
         {
-            var idSolicitud = Guid.NewGuid().ToString();
+        
             var datosInicio = new Dictionary<string, object>
             {
-                { "idSolicitud", idSolicitud },
-                { "tipoAlerta", alerta?.TipoAlerta ?? "Desconocido" },
-                { "idUsuario", alerta?.IdUsuario ?? "N/A" }
+      
+                { "tipoAlerta", alerta?.IdTipoAlerta ??  0 },
+                { "idUsuario", alerta?.IdUsuario ?? 0}
             };
 
             try
@@ -65,52 +65,49 @@ namespace SOS.Controllers
                     return BadRequest(new
                     {
                         error = "Datos de alerta inválidos",
-                        idSolicitud = idSolicitud
+                    
                     });
                 }
 
-                if (string.IsNullOrWhiteSpace(alerta.TipoAlerta))
+                if (alerta.IdTipoAlerta.HasValue==false)
                 {
                     _loggerService.LogWarning("Solicitud de alerta sin tipo especificado", datosInicio);
                     return BadRequest(new
                     {
                         error = "El tipo de alerta es requerido",
-                        idSolicitud = idSolicitud
+                      
                     });
                 }
 
                 // Configurar datos de la alerta
                 alerta.FechaHoraActivacion = DateTime.UtcNow;
-                alerta.EstadoAlerta = "Activa";
+                alerta.IdEstadoAlerta = 1;//activa
                 alerta.FechaRegistro = DateTime.UtcNow;
                 alerta.Activo = true;
 
                 _loggerService.LogDebug("Datos de alerta configurados", new Dictionary<string, object>
                 {
-                    { "idSolicitud", idSolicitud },
+                 
                     { "mensaje", alerta.MensajeAlerta ?? "N/A" },
                     { "ubicacion", alerta.DescripcionUbicacionActivacion ?? "N/A" }
                 });
 
                 // Insertar alerta en base de datos
-                _loggerService.LogInfo("Insertando alerta en base de datos...", new Dictionary<string, object>
-                {
-                    { "idSolicitud", idSolicitud }
-                });
+         
 
                 var id = await _alertasRepository.InsertarAlertaAsync(alerta);
                 alerta.Id = id;
 
                 _loggerService.LogInfo("Alerta insertada exitosamente en base de datos", new Dictionary<string, object>
                 {
-                    { "idSolicitud", idSolicitud },
+          
                     { "alertaId", id }
                 });
 
                 // Enviar notificación push
                 _loggerService.LogInfo("Preparando envío de notificaciones push a través de OneSignal...", new Dictionary<string, object>
                 {
-                    { "idSolicitud", idSolicitud },
+                    
                     { "alertaId", id }
                 });
 
@@ -127,7 +124,7 @@ namespace SOS.Controllers
                 {
                     _loggerService.LogInfo("Notificaciones enviadas exitosamente a través de OneSignal", new Dictionary<string, object>
                     {
-                        { "idSolicitud", idSolicitud },
+                     
                         { "alertaId", id },
                         { "notificationId", notificationId }
                     });
@@ -138,15 +135,15 @@ namespace SOS.Controllers
                         alertaId = id,
                         notificationId = notificationId,
                         fechaActivacion = alerta.FechaHoraActivacion,
-                        tipoAlerta = alerta.TipoAlerta,
-                        idSolicitud = idSolicitud
+                        tipoAlerta = alerta.IdTipoAlerta,
+                      
                     });
                 }
                 else
                 {
                     _loggerService.LogWarning("La alerta fue creada pero las notificaciones no se enviaron correctamente", new Dictionary<string, object>
                     {
-                        { "idSolicitud", idSolicitud },
+                
                         { "alertaId", id }
                     });
 
@@ -155,7 +152,7 @@ namespace SOS.Controllers
                         message = "Alerta de evacuación activada, pero las notificaciones tuvieron un problema.",
                         alertaId = id,
                         warning = "Revisar logs del servidor para más detalles",
-                        idSolicitud = idSolicitud
+                     
                     });
                 }
             }
@@ -163,7 +160,7 @@ namespace SOS.Controllers
             {
                 _loggerService.LogError("Excepción al activar alerta de evacuación", ex, new Dictionary<string, object>
                 {
-                    { "idSolicitud", idSolicitud },
+                  
                     { "excepcion", ex.GetType().Name }
                 });
 
@@ -171,7 +168,7 @@ namespace SOS.Controllers
                 {
                     error = "Error al procesar la solicitud de alerta",
                     message = ex.Message,
-                    idSolicitud = idSolicitud
+                    
                 });
             }
         }
@@ -189,10 +186,10 @@ namespace SOS.Controllers
         [Produces("application/json")]
         public async Task<IActionResult> ConfirmSafety([FromBody] ConfirmacionSeguridad confirmacion)
         {
-            var idSolicitud = Guid.NewGuid().ToString();
+    
             var datosInicio = new Dictionary<string, object>
             {
-                { "idSolicitud", idSolicitud },
+             
                 { "idUsuario", confirmacion?.IdUsuario.ToString() ?? "N/A" },
                 { "alertaId", confirmacion?.AlertaEvacuacionId.ToString() ?? "N/A" }
             };
@@ -208,7 +205,7 @@ namespace SOS.Controllers
                     return BadRequest(new
                     {
                         error = "Datos de confirmación inválidos",
-                        idSolicitud = idSolicitud
+                   
                     });
                 }
 
@@ -218,7 +215,7 @@ namespace SOS.Controllers
                     return BadRequest(new
                     {
                         error = "ID de usuario inválido",
-                        idSolicitud = idSolicitud
+         
                     });
                 }
 
@@ -228,7 +225,7 @@ namespace SOS.Controllers
                     return BadRequest(new
                     {
                         error = "ID de alerta inválido",
-                        idSolicitud = idSolicitud
+                     
                     });
                 }
 
@@ -239,7 +236,7 @@ namespace SOS.Controllers
 
                 _loggerService.LogDebug("Datos de confirmación configurados", new Dictionary<string, object>
                 {
-                    { "idSolicitud", idSolicitud },
+                    
                     { "estado", confirmacion.EstadoReportado ?? "N/A" },
                     { "ubicacion", $"({confirmacion.Latitud}, {confirmacion.Longitud})" }
                 });
@@ -247,14 +244,14 @@ namespace SOS.Controllers
                 // Insertar confirmación en base de datos
                 _loggerService.LogInfo("Insertando confirmación de seguridad en base de datos...", new Dictionary<string, object>
                 {
-                    { "idSolicitud", idSolicitud }
+                   
                 });
 
                 var id = await _confirmacionesRepository.InsertarConfirmacionAsync(confirmacion);
 
                 _loggerService.LogInfo("Confirmación de seguridad registrada exitosamente", new Dictionary<string, object>
                 {
-                    { "idSolicitud", idSolicitud },
+                  
                     { "confirmacionId", id },
                     { "idUsuario", confirmacion.IdUsuario },
                     { "estado", confirmacion.EstadoReportado ?? "N/A" },
@@ -274,14 +271,14 @@ namespace SOS.Controllers
                         longitud = confirmacion.Longitud
                     },
                     fechaConfirmacion = confirmacion.FechaHoraConfirmacion,
-                    idSolicitud = idSolicitud
+               
                 });
             }
             catch (Exception ex)
             {
                 _loggerService.LogError("Excepción al registrar confirmación de seguridad", ex, new Dictionary<string, object>
                 {
-                    { "idSolicitud", idSolicitud },
+                 
                     { "excepcion", ex.GetType().Name }
                 });
 
@@ -289,7 +286,7 @@ namespace SOS.Controllers
                 {
                     error = "Error al registrar confirmación de seguridad",
                     message = ex.Message,
-                    idSolicitud = idSolicitud
+                
                 });
             }
         }
@@ -307,36 +304,30 @@ namespace SOS.Controllers
    
         public async Task<ActionResult<AlertaEvacuacion>> GetLatestActiveAlert()
         {
-            var idSolicitud = Guid.NewGuid().ToString();
+  
 
             try
             {
-                _loggerService.LogInfo("Consultando última alerta activa", new Dictionary<string, object>
-                {
-                    { "idSolicitud", idSolicitud }
-                });
+               
 
                 var latestAlert = await _alertasRepository.ObtenerUltimaAlertaActivaAsync();
 
                 if (latestAlert == null)
                 {
-                    _loggerService.LogInfo("No hay alertas activas en el sistema", new Dictionary<string, object>
-                    {
-                        { "idSolicitud", idSolicitud }
-                    });
+                 
 
                     return NotFound(new
                     {
                         message = "No hay alertas activas en este momento.",
-                        idSolicitud = idSolicitud
+                  
                     });
                 }
 
                 _loggerService.LogInfo("Última alerta activa encontrada", new Dictionary<string, object>
                 {
-                    { "idSolicitud", idSolicitud },
+                   
                     { "alertaId", latestAlert.Id },
-                    { "tipoAlerta", latestAlert.TipoAlerta ?? "N/A" },
+                    { "tipoAlerta", latestAlert.EstadoAlerta },
                     { "fechaActivacion", latestAlert.FechaHoraActivacion }
                 });
 
@@ -346,7 +337,7 @@ namespace SOS.Controllers
             {
                 _loggerService.LogError("Excepción al obtener última alerta activa", ex, new Dictionary<string, object>
                 {
-                    { "idSolicitud", idSolicitud },
+                  
                     { "excepcion", ex.GetType().Name }
                 });
 
@@ -354,7 +345,7 @@ namespace SOS.Controllers
                 {
                     error = "Error al obtener información de alertas",
                     message = ex.Message,
-                    idSolicitud = idSolicitud
+               
                 });
             }
         }

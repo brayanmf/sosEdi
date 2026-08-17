@@ -1,36 +1,29 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\braya\\Desktop\\proyectoEdi\\sos_edi\\sos.csproj": {}
+    "/Users/tgestiona/RiderProjects/sos/sos.csproj": {}
   },
   "projects": {
-    "C:\\Users\\braya\\Desktop\\proyectoEdi\\sos_edi\\sos.csproj": {
+    "/Users/tgestiona/RiderProjects/sos/sos.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\braya\\Desktop\\proyectoEdi\\sos_edi\\sos.csproj",
+        "projectUniqueName": "/Users/tgestiona/RiderProjects/sos/sos.csproj",
         "projectName": "sos",
-        "projectPath": "C:\\Users\\braya\\Desktop\\proyectoEdi\\sos_edi\\sos.csproj",
-        "packagesPath": "C:\\Users\\braya\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\braya\\Desktop\\proyectoEdi\\sos_edi\\obj\\",
+        "projectPath": "/Users/tgestiona/RiderProjects/sos/sos.csproj",
+        "packagesPath": "/Users/tgestiona/.nuget/packages/",
+        "outputPath": "/Users/tgestiona/RiderProjects/sos/obj/",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\braya\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "/Users/tgestiona/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net10.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net10.0": {
-            "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {}
           }
@@ -45,11 +38,10 @@
           "auditLevel": "low",
           "auditMode": "all"
         },
-        "SdkAnalysisLevel": "10.0.300"
+        "SdkAnalysisLevel": "10.0.200"
       },
       "frameworks": {
         "net10.0": {
-          "framework": "net10.0",
           "targetAlias": "net10.0",
           "dependencies": {
             "Dapper": {
@@ -100,7 +92,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.303/PortableRuntimeIdentifierGraph.json",
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/10.0.203/PortableRuntimeIdentifierGraph.json",
           "packagesToPrune": {
             "Microsoft.AspNetCore": "(,10.0.32767]",
             "Microsoft.AspNetCore.Antiforgery": "(,10.0.32767]",

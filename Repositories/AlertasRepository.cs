@@ -18,8 +18,8 @@ public class AlertasRepository
 
        using var cn = await _db.CreateConnectionAsync();
             var sql = @"
-                INSERT INTO SOS.AlertasEvacuacion (IdUsuario, FechaHoraActivacion, TipoAlerta, MensajeAlerta, LatitudActivacion, LongitudActivacion, DescripcionUbicacionActivacion, EstadoAlerta, UsuarioRegistro, FechaRegistro, Activo)
-                VALUES (@IdUsuario, @FechaHoraActivacion, @TipoAlerta, @MensajeAlerta, @LatitudActivacion, @LongitudActivacion, @DescripcionUbicacionActivacion, @EstadoAlerta, @UsuarioRegistro, @FechaRegistro, @Activo);
+                INSERT INTO SOS.AlertasEvacuacion (IdUsuario, FechaHoraActivacion, IdTipoAlerta, MensajeAlerta, LatitudActivacion, LongitudActivacion, DescripcionUbicacionActivacion, IdEstadoAlerta, UsuarioRegistro, Activo)
+                VALUES (@IdUsuario, @FechaHoraActivacion, @IdTipoAlerta, @MensajeAlerta, @LatitudActivacion, @LongitudActivacion, @DescripcionUbicacionActivacion, @IdEstadoAlerta, @UsuarioRegistro, @Activo);
                 SELECT CAST(SCOPE_IDENTITY() as int);";
 
             var id = await cn.QuerySingleAsync<int>(sql, alerta);
@@ -31,11 +31,13 @@ public class AlertasRepository
     {
           using var cn = await _db.CreateConnectionAsync();
             var sql = @"
-                SELECT TOP 1 * FROM SOS.AlertasEvacuacion
-                WHERE EstadoAlerta = 'Activa'
-                ORDER BY FechaHoraActivacion DESC;";
+                SELECT TOP 1 al.*,lv.ValorTexto as TipoAlerta, lv1.ValorTexto as EstadoAlerta FROM SOS.AlertasEvacuacion as al inner join
+                   EDI.ADM.ListaValores lv  on  al.IdTipoAlerta=lv.ValorNumerico  and lv.IdLista = 1091 inner join
+                   EDI.ADM.ListaValores lv1  on  al.IdEstadoAlerta=lv1.ValorNumerico  and lv1.IdLista = 1092          
+                WHERE al.IdEstadoAlerta = 1
+                ORDER BY al.FechaHoraActivacion DESC";
 
-            return await cn.QueryFirstOrDefaultAsync<AlertaEvacuacion>(sql);
+            return await cn.QueryFirstOrDefaultAsync<AlertaEvacuacion?>(sql);
         
     }
 }

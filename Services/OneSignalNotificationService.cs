@@ -56,11 +56,11 @@ namespace SOS.Services
                     data = new Dictionary<string, object>
                     {
                         { "alerta_id", alerta.Id },
-                        { "tipo_alerta", alerta.TipoAlerta ?? "" },
+                        { "tipo_alerta", alerta.IdTipoAlerta ??0 },
                         { "latitud", alerta.LatitudActivacion ?? 0 },
                         { "longitud", alerta.LongitudActivacion ?? 0 },
                         { "descripcion", alerta.DescripcionUbicacionActivacion ?? "" },
-                        { "estado", alerta.EstadoAlerta ?? "Activa" },
+                        { "estado", alerta.IdEstadoAlerta ?? 0 },
                         { "timestamp", DateTime.UtcNow.ToString("O") }
                     },
 
